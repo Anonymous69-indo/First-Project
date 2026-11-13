@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe"
+      crossorigin="anonymous"
+    />
+    <style>
+      a {
+        text-decoration: none;
+        color: #6c757d;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .not-valid {
+        border: 2px solid #ffff !important;
+      }
+      .not-valid:focus {
+        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+      }
+      .strength-meter {
+        height: 6px;
+        background: #e9ecef;
+        border-radius: 3px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+      .strength-meter-bar {
+        height: 100%;
+        width: 0;
+        background: #dc3545;
+        transition:
+          width 0.2s ease,
+          background-color 0.2s ease;
+      }
+      .invalid-feed {
+        color: aliceblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="container-fluid d-flex justify-content-center align-items-center"
+      style="height: 100vh"
+      id="container"
+    >
+      <div class="section-log" style="width: 400px">
+        <div class="card p-4 shadow">
+          <h2 class="text-center mb-4" id="Log">Log In</h2>
+          <form id="auth-form">
+            <div class="mb-3" id="Email">
+              <label for="email-username" id="email" class="form-label"
+                >Email or Username</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="email-username"
+                placeholder="Enter your email or username"
+              />
+              <div id="email-check" class="invalid-feed"></div>
+            </div>
+            <div class="mb-3" id="Username">
+              <!--    <label for="email-username" id="email" class="form-label">Email or Username</label>
+                        <input type="text" class="form-control" id="email-username" placeholder="Enter your email or username"> -->
+            </div>
+            <div class="mb-3" id="Password">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password-in"
+                placeholder="Enter your password"
+              />
+              <div id="pw-check" class="invalid-feed"></div>
+            </div>
+            <div class="mb-3" id="re-password">
+              <!--    <label for="re-password" class="form-label">Re-enter Password</label>
+                        <input type="password" class="form-control" id="re-password" placeholder="Re-enter your password"> -->
+            </div>
+            <button type="submit" class="btn btn-primary w-100" id="submit">
+              Log in
+            </button>
+            <a
+              href="#"
+              class="d-block text-center mt-3 text-muted"
+              id="forgot-password"
+              >Forgot Password?</a
+            >
+            <a
+              href="#"
+              class="d-block text-center mt-2 text-muted"
+              id="create-account"
+              >Create Account</a
+            >
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      const emailContainer = document.getElementById("Email");
+      const usernameContainer = document.getElementById("Username");
+      const passwordContainer = document.getElementById("Password");
+      const rePasswordContainer = document.getElementById("re-password");
+      const logHeader = document.getElementById("Log");
+      const submitBtn = document.getElementById("submit");
+      const forgotPasswordLink = document.getElementById("forgot-password");
+      const createAccountLink = document.getElementById("create-account");
+      
+      let isLoginMode = true;
+
+      function updatePasswordStrength() {
+        const passwordInput = document.getElementById("password-in");
+        const strengthText = document.getElementById("password-strength-text");
+        const strengthMeter = document.getElementById("password-strength-meter");
+        const strengthBar = document.getElementById("password-strength-bar");
+        
+        if (!passwordInput || !strengthBar) return;
+        
+        const value = passwordInput.value;
+        const score = [
+          value.length >= 8,
+          /[a-z]/.test(value),
+          /[A-Z]/.test(value),
+          /\d/.test(value),
+          /[^A-Za-z0-9]/.test(value),
+        ].filter(Boolean).length;
+
+        const levels = [
+          { label: "Very weak", width: "20%", color: "#dc3545" },
+          { label: "Weak", width: "40%", color: "#fd7e14" },
+          { label: "Fair", width: "60%", color: "#ffc107" },
+          { label: "Good", width: "80%", color: "#0d6efd" },
+          { label: "Strong", width: "100%", color: "#198754" },
+        ];
+        const level = levels[Math.max(score - 1, 0)];
+
+        strengthText.textContent = value
+          ? `Password strength: ${level.label}`
+          : "Enter a password";
+        strengthBar.style.width = value ? level.width : "0";
+        strengthBar.style.backgroundColor = level.color;
+        strengthMeter.setAttribute(
+          "aria-valuenow",
+          value ? String(score) : "0"
+        );
+      }
+
+      function validateEmailFormat(emailStr) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(emailStr);
+      }
+
+      createAccountLink.addEventListener("click", function (evt) {
+        evt.preventDefault();
+        
+        if (isLoginMode) {
+          // Switch ke mode Sign Up
+          logHeader.innerHTML = "Create Account";
+          submitBtn.innerHTML = "Sign Up";
+          forgotPasswordLink.style.display = "none";
+
+          emailContainer.innerHTML = `
+            <label for="email-username" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email-username" placeholder="you@example.com">
+            <div id="email-check" class="invalid-feed"></div>`;
+
+          usernameContainer.innerHTML = `
+            <label for="username-input" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username-input" placeholder="Enter your username">
+            <div id="username-check" class="invalid-feed"></div>`;
+
+          passwordContainer.innerHTML = `
+            <label for="password-in" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password-in" placeholder="Enter password">
+            <div id="password-strength-text" class="form-text">Enter a password</div>
+            <div id="password-strength-meter" class="strength-meter" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+              <div id="password-strength-bar" class="strength-meter-bar"></div>
+            </div>
+            <div id="pw-check" class="invalid-feed"></div>`;
+
+          rePasswordContainer.innerHTML = `
+            <label for="re-password-input" class="form-label">Re-enter Password</label>
+            <input type="password" class="form-control" id="re-password-input" placeholder="Re-enter your password">
+            <div id="re-password-check" class="invalid-feed"></div>`;
+
+          document
+            .getElementById("password-in")
+            .addEventListener("input", updatePasswordStrength);
+
+          createAccountLink.innerHTML = "Already have an account? Log In";
+        } else {
+          // Switch ke mode Log In
+          logHeader.innerHTML = "Log In";
+          submitBtn.innerHTML = "Log in";
+          forgotPasswordLink.style.display = "block";
+
+          emailContainer.innerHTML = `
+            <label for="email-username" class="form-label">Email or Username</label>
+            <input type="text" class="form-control" id="email-username" placeholder="Enter your email or username">
+            <div id="email-check" class="invalid-feed"></div>`;
+
+          usernameContainer.innerHTML = "";
+
+          passwordContainer.innerHTML = `
+            <label for="password-in" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password-in" placeholder="Enter your password">
+            <div id="pw-check" class="invalid-feed"></div>`;
+
+          rePasswordContainer.innerHTML = "";
+
+          createAccountLink.innerHTML = "Create Account";
+        }
+
+        isLoginMode = !isLoginMode;
+      });
+
+      submitBtn.onclick = function (evt) {
+        evt.preventDefault();
+
+        // Ambil referensi elemen DOM terbaru saat tombol diklik
+        const emailInput = document.getElementById("email-username");
+        const passwordInput = document.getElementById("password-in");
+        const usernameInput = document.getElementById("username-input");
+        const rePasswordInput = document.getElementById("re-password-input");
+
+        const emailErr = document.getElementById("email-check");
+        const pwErr = document.getElementById("pw-check");
+        const usernameErr = document.getElementById("username-check");
+        const rePwErr = document.getElementById("re-password-check");
+
+        const emailValue = emailInput ? emailInput.value.trim() : "";
+        const passwordValue = passwordInput ? passwordInput.value.trim() : "";
+        const usernameValue = usernameInput ? usernameInput.value.trim() : "";
+        const rePasswordValue = rePasswordInput ? rePasswordInput.value.trim() : "";
+
+        if (isLoginMode) {
+          // Validasi Mode Login
+          if (!emailValue) {
+            emailErr.textContent = "Email or username is required.";
+            emailInput.classList.add("not-valid");
+          } else {
+            emailErr.textContent = "";
+            emailInput.classList.remove("not-valid");
+          }
+
+          if (!passwordValue) {
+            pwErr.textContent = "Password is required.";
+            passwordInput.classList.add("not-valid");
+          } else {
+            pwErr.textContent = "";
+            passwordInput.classList.remove("not-valid");
+          }
+        } else {
+          // Validasi Mode Sign Up
+          if (!emailValue) {
+            emailErr.textContent = "Email is required.";
+            emailInput.classList.add("not-valid");
+          } else if (!validateEmailFormat(emailValue)) {
+            emailErr.textContent = "Enter a valid email address.";
+            emailInput.classList.add("not-valid");
+          } else {
+            emailErr.textContent = "";
+            emailInput.classList.remove("not-valid");
+          }
+
+          if (!usernameValue) {
+            usernameErr.textContent = "Username is required.";
+            usernameInput.classList.add("not-valid");
+          } else {
+            usernameErr.textContent = "";
+            usernameInput.classList.remove("not-valid");
+          }
+
+          if (!passwordValue) {
+            pwErr.textContent = "Password is required.";
+            passwordInput.classList.add("not-valid");
+          } else {
+            pwErr.textContent = "";
+            passwordInput.classList.remove("not-valid");
+          }
+
+          if (!rePasswordValue) {
+            rePwErr.textContent = "Please confirm your password.";
+            rePasswordInput.classList.add("not-valid");
+          } else if (passwordValue !== rePasswordValue) {
+            rePwErr.textContent = "Passwords do not match.";
+            rePasswordInput.classList.add("not-valid");
+          } else {
+            rePwErr.textContent = "";
+            rePasswordInput.classList.remove("not-valid");
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

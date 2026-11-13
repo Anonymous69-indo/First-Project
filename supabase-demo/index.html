@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>Supabase Auth Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="auth-card">
+      <p class="eyebrow">SUPABASE AUTH EXAMPLE</p>
+      <h1 id="page-title">Welcome back</h1>
+      <p class="intro" id="page-description">
+        Sign in to your account with your email and password.
+      </p>
+
+      <form id="auth-form">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          required
+        />
+
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="At least 6 characters"
+          minlength="6"
+          required
+        />
+
+        <button id="submit-button" type="submit">Sign in</button>
+      </form>
+
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+
+      <section id="signed-in-panel" class="signed-in-panel" hidden>
+        <p>You are signed in as <strong id="signed-in-email"></strong>.</p>
+        <button id="sign-out-button" class="secondary-button" type="button">
+          Sign out
+        </button>
+      </section>
+
+      <button id="mode-button" class="text-button" type="button">
+        Need an account? Sign up
+      </button>
+
+      <p class="security-note">
+        Demo only: never put a Supabase service-role key in browser code.
+      </p>
+    </main>
+  </body>
+</html>
