@@ -38,7 +38,7 @@
             class="text-xs font-normal text-gray-500 ml-4"
           >
             <p id="current-time">Current Time</p>
-            <p>BGR, INDONESIA</p>
+            <p id="Location" data-value="BGR, INDONESIA">BGR, INDONESIA</p>
           </div>
         </div>
       </div>
@@ -47,11 +47,12 @@
           I am a student who like to wonder around and learn new things.<br />
           From basic things to complex projects, I love to learn and grow.
         </p>
-        <a href="#" class="text-lime-500 hover:underline">More personal info</a>
+        <a href="#" id="more-info" data-value="More personal info" class="text-lime-500 hover:underline">More personal info</a>
       </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
+      // Update current time every second
       const currentTimeElement = document.getElementById("current-time");
       function updateTime() {
         const now = new Date();
@@ -64,27 +65,31 @@
       }
       setInterval(updateTime, 1000);
       updateTime();
-
-    const elemenTeks = document.getElementById("nama");
-    // Karakter gaya programmer
-    const daftarKarakter = "{}[]()<>/\\|;:=+-_*&^%$#@!~01";
     
-    let intervalAnimasi = null;
-    // 1. Tambahkan variabel penanda status
-    let sedangBerjalan = false; 
+
+    // Teks acak
+    const elemenTeks = document.getElementById("nama");
+    const daftarKarakter = "{}[]()<>/\\|;:=+-_*&^%$#@!~01";
+    const elemeninfo = document.getElementById("more-info");
+    const lokasi = document.getElementById("Location");
+    const secretchar = "#_-/\|<>01";
+    
+    const animasiBerjalan = new WeakSet();
 
     function acakTeks(target) {
-      // 2. Cek apakah animasi masih berjalan. Jika ya, abaikan perintah baru.
-      if (sedangBerjalan) return;
-
-      // 3. Kunci animasi agar tidak bisa diganggu sampai selesai
-      sedangBerjalan = true; 
+      if (animasiBerjalan.has(target)) return;
 
       let iterasi = 0;
       const teksAsli = target.dataset.value;
+      if (teksAsli === undefined) {
+        console.error("Elemen animasi harus memiliki atribut data-value.", target);
+        return;
+      }
 
-      intervalAnimasi = setInterval(() => {
-        target.innerText = teksAsli
+      animasiBerjalan.add(target);
+
+      const intervalAnimasi = setInterval(() => {
+        target.textContent = teksAsli
           .split("")
           .map((huruf, index) => {
             if (huruf === " ") return " ";
@@ -98,11 +103,10 @@
         // Jika semua huruf sudah kembali ke bentuk asli
         if (iterasi >= teksAsli.length) {
           clearInterval(intervalAnimasi);
-          // 4. Buka kembali kuncinya karena animasi sudah selesai
-          sedangBerjalan = false; 
+          animasiBerjalan.delete(target);
         }
 
-        iterasi += 1 / 3; 
+        iterasi += 2 / 3; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
       }, 30);
     }
 
@@ -111,9 +115,56 @@
       acakTeks(elemenTeks);
     });
 
-    // Jalan saat hover (hanya akan dieksekusi jika sedangBerjalan === false)
-    elemenTeks.addEventListener("mouseover", (event) => {
-      acakTeks(event.target);
+    // Jalankan ulang animasi saat elemen di-hover.
+    elemenTeks.addEventListener("mouseover", () => {
+      acakTeks(elemenTeks);
+    });
+    
+    window.addEventListener("DOMContentLoaded", () => {
+      acakTeks(elemeninfo);
+    });
+
+    // Jalankan ulang animasi saat elemen di-hover.
+    elemeninfo.addEventListener("mouseover", () => {
+      acakTeks(elemeninfo);
+    });
+
+    //Buat lokasi
+    function tutuplokasi(target) {
+      if (animasiBerjalan.has(target)) return;
+
+      let iterasi = 0;
+      const teksAsli = target.dataset.value;
+      if (teksAsli === undefined) {
+        console.error("Elemen animasi harus memiliki atribut data-value.", target);
+        return;
+      }
+
+      animasiBerjalan.add(target);
+
+      const intervalAnimasi = setInterval(() => {
+        target.textContent = teksAsli
+          .split("")
+          .map((huruf, index) => {
+            if (huruf === " ") return " ";
+            if (index < iterasi) {
+              return teksAsli[index];
+            }
+            return secretchar[Math.floor(Math.random() * secretchar.length)];
+          })
+          .join("");
+
+        // Jika semua huruf sudah kembali ke bentuk asli
+        if (iterasi >= teksAsli.length) {
+          clearInterval(intervalAnimasi);
+          animasiBerjalan.delete(target);
+        }
+
+        iterasi += 1 / 20; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
+      }, 30);
+    }
+    lokasi.addEventListener("mouseover", () => {
+      tutuplokasi(lokasi);
     });
     </script>
   </body>
