@@ -4,10 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Portofolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "JetBrains Mono", monospace;
+      }
+    </style>
   </head>
-  <body>
-    <h1 class="text-3xl font-bold underline">
-      Hel
-    </h1>
+  <body class="bg-zinc-900">
+    <section
+      class="size-fit bg-zinc-800/20 p-4 backdrop-blur-md gap-y-6 text-gray-400"
+      id="Personal-Information"
+    >
+      <div class="flex items-center">
+        <div id="navbar-profile" class="flex items-center space-x-4">
+          <img
+            src="https://framerusercontent.com/images/W83dnafBGn0dnw4YVFzfKmRc3TM.jpg?scale-down-to=512&width=1881&height=1881"
+            alt="Profile Picture"
+            class="w-10 h-10"
+          />
+          <div class="text-sm" id="profile-name-status">
+            <p class="font-normal">Muhammad Dzaky Alfajri</p>
+            <p class="font-light text-gray-500">Student</p>
+          </div>
+          <div
+            id="profile-Time-Location"
+            class="text-xs font-normal text-gray-500 ml-4"
+          >
+            <p id="current-time">Current Time</p>
+            <p>BGR, INDONESIA</p>
+          </div>
+        </div>
+      </div>
+      <div id="quote" class="text-sm text-justify font-normal">
+        <p>
+          I am a student who like to wonder around and learn new things.<br />
+          From basic things to complex projects, I love to learn and grow.
+        </p>
+        <a href="#" class="text-lime-500 hover:underline">More personal info</a>
+      </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script>
+      const currentTimeElement = document.getElementById("current-time");
+      function updateTime() {
+        const now = new Date();
+        const options = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        };
+        currentTimeElement.textContent = now.toLocaleTimeString([], options);
+      }
+      setInterval(updateTime, 1000);
+      updateTime();
+    </script>
   </body>
 </html>
