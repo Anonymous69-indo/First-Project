@@ -19,9 +19,10 @@
   </head>
   <body class="bg-zinc-900">
     <section
-      class="size-fit bg-zinc-800/20 m-2 p-4 backdrop-blur-md flex flex-col gap-4 text-gray-400"
+      class="size-fit bg-zinc-800/20 m-2 p-4 backdrop-blur-md flex flex-col gap-4"
       id="Personal-Information"
     >
+    <div id="first-section" class="flex flex-col gap-4 text-gray-400">
       <div class="flex items-center">
         <div id="navbar-profile" class="flex items-center space-x-4">
           <img
@@ -44,13 +45,13 @@
       </div>
       <div id="quote" class="text-sm text-wrap text-justify font-normal">
         <p>
-          I am a student who like to wonder around and learn new things.<br />
-          From basic things to complex projects, I love to learn and grow.
+          I am a student who like to <span class="text-gray-300 font-bold">wonder</span> around and <span class="text-gray-300 font-bold">learn new things.</span><br />
+          From basic things to <span class="text-gray-300 font-bold">complex projects</span>, I love to learn and <span class="text-gray-300 font-bold">grow</span>.
         </p>
         <a href="#" id="more-info" data-value="More personal info" class="text-lime-500 hover:underline">More personal info</a>
       </div>
+    </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
       // Update current time every second
       const currentTimeElement = document.getElementById("current-time");
