@@ -30,7 +30,7 @@
             class="w-10 h-10"
           />
           <div class="text-sm" id="profile-name-status">
-            <p class="font-normal">Muhammad Dzaky Alfajri</p>
+            <p id="nama" data-value="Muhammad Dzaky Alfajri" class="font-normal">Muhammad Dzaky Alfajri</p>
             <p class="font-light text-gray-500">Student</p>
           </div>
           <div
@@ -64,6 +64,57 @@
       }
       setInterval(updateTime, 1000);
       updateTime();
+
+    const elemenTeks = document.getElementById("nama");
+    // Karakter gaya programmer
+    const daftarKarakter = "{}[]()<>/\\|;:=+-_*&^%$#@!~01";
+    
+    let intervalAnimasi = null;
+    // 1. Tambahkan variabel penanda status
+    let sedangBerjalan = false; 
+
+    function acakTeks(target) {
+      // 2. Cek apakah animasi masih berjalan. Jika ya, abaikan perintah baru.
+      if (sedangBerjalan) return;
+
+      // 3. Kunci animasi agar tidak bisa diganggu sampai selesai
+      sedangBerjalan = true; 
+
+      let iterasi = 0;
+      const teksAsli = target.dataset.value;
+
+      intervalAnimasi = setInterval(() => {
+        target.innerText = teksAsli
+          .split("")
+          .map((huruf, index) => {
+            if (huruf === " ") return " ";
+            if (index < iterasi) {
+              return teksAsli[index];
+            }
+            return daftarKarakter[Math.floor(Math.random() * daftarKarakter.length)];
+          })
+          .join("");
+
+        // Jika semua huruf sudah kembali ke bentuk asli
+        if (iterasi >= teksAsli.length) {
+          clearInterval(intervalAnimasi);
+          // 4. Buka kembali kuncinya karena animasi sudah selesai
+          sedangBerjalan = false; 
+        }
+
+        iterasi += 1 / 3; 
+      }, 30);
+    }
+
+    // Jalan otomatis saat halaman dimuat
+    window.addEventListener("DOMContentLoaded", () => {
+      acakTeks(elemenTeks);
+    });
+
+    // Jalan saat hover (hanya akan dieksekusi jika sedangBerjalan === false)
+    elemenTeks.addEventListener("mouseover", (event) => {
+      acakTeks(event.target);
+    });
     </script>
   </body>
 </html>
