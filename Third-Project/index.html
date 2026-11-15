@@ -22,35 +22,51 @@
       class="size-fit bg-zinc-800/20 m-2 p-4 backdrop-blur-md flex flex-col gap-4"
       id="Personal-Information"
     >
-    <div id="first-section" class="flex flex-col gap-4 text-gray-400">
-      <div class="flex items-center">
-        <div id="navbar-profile" class="flex items-center space-x-4">
-          <img
-            src="https://framerusercontent.com/images/W83dnafBGn0dnw4YVFzfKmRc3TM.jpg?scale-down-to=512&width=1881&height=1881"
-            alt="Profile Picture"
-            class="w-10 h-10"
-          />
-          <div class="text-sm" id="profile-name-status">
-            <p id="nama" data-value="Muhammad Dzaky Alfajri" class="font-normal">Muhammad Dzaky Alfajri</p>
-            <p class="font-light text-gray-500">Student</p>
-          </div>
-          <div
-            id="profile-Time-Location"
-            class="text-xs font-normal text-gray-500 ml-4"
-          >
-            <p id="current-time">Current Time</p>
-            <p id="Location" data-value="BGR, INDONESIA">BGR, INDONESIA</p>
+      <div id="first-section" class="flex flex-col gap-4 text-gray-400">
+        <div class="flex items-center">
+          <div id="navbar-profile" class="flex items-center space-x-4">
+            <img
+              src="https://framerusercontent.com/images/W83dnafBGn0dnw4YVFzfKmRc3TM.jpg?scale-down-to=512&width=1881&height=1881"
+              alt="Profile Picture"
+              class="w-10 h-10"
+            />
+            <div class="text-sm" id="profile-name-status">
+              <p
+                id="nama"
+                data-value="Muhammad Dzaky Alfajri"
+                class="font-normal"
+              >
+                Muhammad Dzaky Alfajri
+              </p>
+              <p class="font-light text-gray-500">Student</p>
+            </div>
+            <div
+              id="profile-Time-Location"
+              class="text-xs font-normal text-gray-500 ml-4"
+            >
+              <p id="current-time">Current Time</p>
+              <p id="Location" data-value="BGR, INDONESIA">BGR, INDONESIA</p>
+            </div>
           </div>
         </div>
+        <div id="quote" class="text-sm text-wrap text-justify font-normal">
+          <p>
+            I am a student who like to
+            <span class="text-gray-300 font-bold">wonder</span> around and
+            <span class="text-gray-300 font-bold">learn new things.</span><br />
+            From basic things to
+            <span class="text-gray-300 font-bold">complex projects</span>, I
+            love to learn and <span class="text-gray-300 font-bold">grow</span>.
+          </p>
+          <a
+            href="#"
+            id="more-info"
+            data-value="More personal info"
+            class="text-lime-500 hover:underline"
+            >More personal info</a
+          >
+        </div>
       </div>
-      <div id="quote" class="text-sm text-wrap text-justify font-normal">
-        <p>
-          I am a student who like to <span class="text-gray-300 font-bold">wonder</span> around and <span class="text-gray-300 font-bold">learn new things.</span><br />
-          From basic things to <span class="text-gray-300 font-bold">complex projects</span>, I love to learn and <span class="text-gray-300 font-bold">grow</span>.
-        </p>
-        <a href="#" id="more-info" data-value="More personal info" class="text-lime-500 hover:underline">More personal info</a>
-      </div>
-    </div>
     </section>
     <script>
       // Update current time every second
@@ -66,107 +82,123 @@
       }
       setInterval(updateTime, 1000);
       updateTime();
-    
 
-    // Teks acak
-    const elemenTeks = document.getElementById("nama");
-    const daftarKarakter = "{}[]()<>/\\|;:=+-_*&^%$#@!~01";
-    const elemeninfo = document.getElementById("more-info");
-    const lokasi = document.getElementById("Location");
-    const secretchar = "#_-/\|<>01";
-    
-    const animasiBerjalan = new WeakSet();
+      // Teks acak
+      const elemenTeks = document.getElementById("nama");
+      const daftarKarakter = "{}[]()<>/\\|;:=+-_*&^%$#@!~01";
+      const elemeninfo = document.getElementById("more-info");
+      const lokasi = document.getElementById("Location");
+      const secretchar = "#_-/\|<>01";
 
-    function acakTeks(target) {
-      if (animasiBerjalan.has(target)) return;
+      const animasiBerjalan = new WeakSet();
 
-      let iterasi = 0;
-      const teksAsli = target.dataset.value;
-      if (teksAsli === undefined) {
-        console.error("Elemen animasi harus memiliki atribut data-value.", target);
-        return;
-      }
+      function acakTeks(target) {
+        if (animasiBerjalan.has(target)) return;
 
-      animasiBerjalan.add(target);
-
-      const intervalAnimasi = setInterval(() => {
-        target.textContent = teksAsli
-          .split("")
-          .map((huruf, index) => {
-            if (huruf === " ") return " ";
-            if (index < iterasi) {
-              return teksAsli[index];
-            }
-            return daftarKarakter[Math.floor(Math.random() * daftarKarakter.length)];
-          })
-          .join("");
-
-        // Jika semua huruf sudah kembali ke bentuk asli
-        if (iterasi >= teksAsli.length) {
-          clearInterval(intervalAnimasi);
-          animasiBerjalan.delete(target);
+        let iterasi = 0;
+        const teksAsli = target.dataset.value;
+        if (teksAsli === undefined) {
+          console.error(
+            "Elemen animasi harus memiliki atribut data-value.",
+            target,
+          );
+          return;
         }
 
-        iterasi += 2 / 3; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
-      }, 30);
-    }
+        animasiBerjalan.add(target);
 
-    // Jalan otomatis saat halaman dimuat
-    window.addEventListener("DOMContentLoaded", () => {
-      acakTeks(elemenTeks);
-    });
+        const intervalAnimasi = setInterval(() => {
+          target.textContent = teksAsli
+            .split("")
+            .map((huruf, index) => {
+              if (huruf === " ") return " ";
+              if (index < iterasi) {
+                return teksAsli[index];
+              }
+              return daftarKarakter[
+                Math.floor(Math.random() * daftarKarakter.length)
+              ];
+            })
+            .join("");
 
-    // Jalankan ulang animasi saat elemen di-hover.
-    elemenTeks.addEventListener("mouseover", () => {
-      acakTeks(elemenTeks);
-    });
-    
-    window.addEventListener("DOMContentLoaded", () => {
-      acakTeks(elemeninfo);
-    });
+          // Jika semua huruf sudah kembali ke bentuk asli
+          if (iterasi >= teksAsli.length) {
+            clearInterval(intervalAnimasi);
+            animasiBerjalan.delete(target);
+          }
 
-    // Jalankan ulang animasi saat elemen di-hover.
-    elemeninfo.addEventListener("mouseover", () => {
-      acakTeks(elemeninfo);
-    });
-
-    //Buat lokasi
-    function tutuplokasi(target) {
-      if (animasiBerjalan.has(target)) return;
-
-      let iterasi = 0;
-      const teksAsli = target.dataset.value;
-      if (teksAsli === undefined) {
-        console.error("Elemen animasi harus memiliki atribut data-value.", target);
-        return;
+          iterasi += 2 / 3; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
+        }, 30);
       }
 
-      animasiBerjalan.add(target);
+      // Jalan otomatis saat halaman dimuat
+      window.addEventListener("DOMContentLoaded", () => {
+        acakTeks(elemenTeks);
+        acakTeks(elemeninfo);
+      });
 
-      const intervalAnimasi = setInterval(() => {
-        target.textContent = teksAsli
-          .split("")
-          .map((huruf, index) => {
-            if (huruf === " ") return " ";
-            if (index < iterasi) {
-              return teksAsli[index];
-            }
-            return secretchar[Math.floor(Math.random() * secretchar.length)];
-          })
-          .join("");
+      // Jalankan ulang animasi saat elemen di-hover.
+      elemenTeks.addEventListener("mouseover", () => {
+        acakTeks(elemenTeks);
+      });
 
-        // Jika semua huruf sudah kembali ke bentuk asli
-        if (iterasi >= teksAsli.length) {
-          clearInterval(intervalAnimasi);
-          animasiBerjalan.delete(target);
+
+      // Jalankan ulang animasi saat elemen di-hover.
+      elemeninfo.addEventListener("mouseover", () => {
+        acakTeks(elemeninfo);
+      });
+
+      //Buat lokasi
+      function tutuplokasi(target) {
+        if (animasiBerjalan.has(target)) return;
+
+        let iterasi = 0;
+        const teksAsli = target.dataset.value;
+        if (teksAsli === undefined) {
+          console.error(
+            "Elemen animasi harus memiliki atribut data-value.",
+            target,
+          );
+          return;
         }
 
-        iterasi += 1 / 20; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
-      }, 30);
-    }
-    lokasi.addEventListener("mouseover", () => {
-      tutuplokasi(lokasi);
-    });
+        animasiBerjalan.add(target);
+
+        const intervalAnimasi = setInterval(() => {
+          target.textContent = teksAsli
+            .split("")
+            .map((huruf, index) => {
+              if (huruf === " ") return " ";
+              if (index < iterasi) {
+                return teksAsli[index];
+              }
+              return secretchar[Math.floor(Math.random() * secretchar.length)];
+            })
+            .join("");
+
+          // Jika semua huruf sudah kembali ke bentuk asli
+          if (iterasi >= teksAsli.length) {
+            clearInterval(intervalAnimasi);
+            animasiBerjalan.delete(target);
+          }
+
+          iterasi += 1 / 20; // Mengatur kecepatan animasi (semakin kecil, semakin cepat)
+        }, 30);
+      }
+      lokasi.addEventListener("mouseover", () => {
+        tutuplokasi(lokasi);
+      });
+
+      // Config Tailwind transisi masuk page
+      
+      const elemenprofilumum = document.getElementById("first-section");
+      elemenprofilumum.classList.add("opacity-0", "translate-y-4");
+      window.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+          elemenprofilumum.classList.remove("opacity-0", "translate-y-4");
+          elemenprofilumum.classList.add("transition", "duration-500", "ease-in");
+        }, 100);
+      });
     </script>
   </body>
 </html>
