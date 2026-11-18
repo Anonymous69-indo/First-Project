@@ -11,20 +11,160 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      body {
+      .first-section {
         font-family: "JetBrains Mono", monospace;
+      }
+      .sec-section {
+        font-family: "Inter", Courier, monospace;
+      }
+
+      /* Tombol menjadi wadah acuan untuk empat penanda sudut yang posisinya absolute. */
+      .corner-button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.24rem 0.35rem;
+        color: #d4d4d8;
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        transition: color 300ms ease;
+      }
+
+      /* Empat penanda awal berukuran kecil dan hanya menggambar sisi sudutnya. */
+      .button-corner {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+        border: 0 solid currentColor;
+        pointer-events: none;
+        transition:
+          width 600ms cubic-bezier(0.16, 1, 0.3, 1),
+          height 600ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .button-corner-top-left {
+        top: 0;
+        left: 0;
+        border-top-width: 1px;
+        border-left-width: 1px;
+      }
+
+      .button-corner-top-right {
+        top: 0;
+        right: 0;
+        border-top-width: 1px;
+        border-right-width: 1px;
+      }
+
+      .button-corner-bottom-left {
+        bottom: 0;
+        left: 0;
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+      }
+
+      .button-corner-bottom-right {
+        right: 0;
+        bottom: 0;
+        border-right-width: 1px;
+        border-bottom-width: 1px;
+      }
+
+      /* Lebar dan tinggi penanda dianimasikan langsung agar gerakannya terlihat jelas. */
+      .corner-button:hover,
+      .corner-button:focus-visible {
+        color: #ffffff;
+      }
+
+      .corner-button:hover .button-corner,
+      .corner-button:focus-visible .button-corner {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Hormati preferensi aksesibilitas untuk mengurangi gerakan animasi. */
+      @media (prefers-reduced-motion: reduce) {
+        .corner-button,
+        .button-corner {
+          transition: none;
+        }
+      }
+
+      /* Lapisan crosshair mengikuti posisi pointer tanpa mengganggu interaksi. */
+      #cursor-crosshair {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 120ms ease;
+      }
+
+      #cursor-crosshair.is-visible {
+        opacity: 1;
+      }
+
+      /* Garis horizontal dan vertikal bertemu tepat di posisi pointer. */
+      #cursor-crosshair .crosshair-line {
+        position: absolute;
+        background: rgba(209, 213, 219, 0.28);
+      }
+
+      #cursor-crosshair .crosshair-horizontal {
+        left: 0;
+        width: 100%;
+        height: 1px;
+      }
+
+      #cursor-crosshair .crosshair-vertical {
+        top: 0;
+        height: 100%;
+        width: 1px;
+      }
+
+      /* Label koordinat biasanya diletakkan di bawah-kiri titik potong. */
+      #cursor-coordinates {
+        position: absolute;
+        padding: 3px 5px;
+        color: #a1a1aa;
+        background: rgba(24, 24, 27, 0.88);
+        border: 1px solid rgba(161, 161, 170, 0.2);
+        font: 10px "JetBrains Mono", monospace;
+        white-space: nowrap;
+      }
+
+      /* Sembunyikan crosshair pada perangkat sentuh yang tidak memiliki pointer. */
+      @media (pointer: coarse) {
+        #cursor-crosshair {
+          display: none;
+        }
       }
     </style>
   </head>
   <body class="bg-zinc-900">
+    <!-- Overlay garis dan label koordinat yang posisinya diatur JavaScript. -->
+    <div id="cursor-crosshair" aria-hidden="true">
+      <div class="crosshair-line crosshair-horizontal"></div>
+      <div class="crosshair-line crosshair-vertical"></div>
+      <span id="cursor-coordinates"></span>
+    </div>
+
     <section
       class="size-fit bg-zinc-800/20 m-2 p-4 backdrop-blur-md flex flex-col gap-4"
       id="Personal-Information"
     >
       <div id="first-section" class="flex flex-col gap-4 text-gray-400">
         <div class="flex items-center">
-          <div id="navbar-profile" class="flex items-center space-x-4">
+          <div id="navbar-profile" class="flex space-x-4">
             <img
               src="https://framerusercontent.com/images/W83dnafBGn0dnw4YVFzfKmRc3TM.jpg?scale-down-to=512&width=1881&height=1881"
               alt="Profile Picture"
@@ -67,8 +207,80 @@
           >
         </div>
       </div>
+      <div id="sec-section" class="flex flex-col gap-4 text-gray-400">
+        <div class="flex-col flex gap-1">
+          <div id="sec-section-content" class="flex space-x-4">
+            <h1 class="text-xl font-semibold text-gray-300">
+              If you have any questions or would like to get in touch,<br />
+              feel free to reach out!
+            </h1>
+          </div>
+          <div id="sec-section-button" class="flex space-x-4">
+            <button class="corner-button">
+              Book a Call
+              <span class="button-corner button-corner-top-left"></span>
+              <span class="button-corner button-corner-top-right"></span>
+              <span class="button-corner button-corner-bottom-left"></span>
+              <span class="button-corner button-corner-bottom-right"></span>
+            </button>
+            <button class="corner-button">
+              Send an Email
+              <span class="button-corner button-corner-top-left"></span>
+              <span class="button-corner button-corner-top-right"></span>
+              <span class="button-corner button-corner-bottom-left"></span>
+              <span class="button-corner button-corner-bottom-right"></span>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
     <script>
+      // Siapkan elemen crosshair dan garisnya agar bisa dipindahkan saat pointer bergerak.
+      const crosshair = document.getElementById("cursor-crosshair");
+      const horizontalLine = crosshair.querySelector(".crosshair-horizontal");
+      const verticalLine = crosshair.querySelector(".crosshair-vertical");
+      const coordinateLabel = document.getElementById("cursor-coordinates");
+
+      window.addEventListener("pointermove", (event) => {
+        const { clientX, clientY } = event;
+
+        // Tempatkan garis horizontal dan vertikal pada koordinat pointer di viewport.
+        horizontalLine.style.top = `${clientY}px`;
+        verticalLine.style.left = `${clientX}px`;
+
+        // Tampilkan koordinat relatif terhadap pojok kiri atas viewport.
+        coordinateLabel.textContent = `X: ${Math.round(clientX)}  Y: ${Math.round(clientY)}`;
+
+        // Secara default, label berada sedikit di bawah dan kiri titik potong.
+        let labelX = clientX - 10;
+        let labelY = clientY + 10;
+        let transform = "translate(-100%, 0)";
+
+        // Jika terlalu dekat sisi kiri, pindahkan label ke kanan pointer.
+        if (clientX < 125) {
+          labelX = clientX + 10;
+          transform = "translate(0, 0)";
+        }
+
+        // Jika label akan keluar dari bawah layar, pindahkan ke atas pointer.
+        if (clientY > window.innerHeight - 30) {
+          labelY = clientY - 10;
+          transform = clientX < 125
+            ? "translate(0, -100%)"
+            : "translate(-100%, -100%)";
+        }
+
+        coordinateLabel.style.left = `${labelX}px`;
+        coordinateLabel.style.top = `${labelY}px`;
+        coordinateLabel.style.transform = transform;
+        crosshair.classList.add("is-visible");
+      });
+
+      // Sembunyikan overlay saat pointer keluar dari jendela browser.
+      document.documentElement.addEventListener("pointerleave", () => {
+        crosshair.classList.remove("is-visible");
+      });
+
       // Update current time every second
       const currentTimeElement = document.getElementById("current-time");
       function updateTime() {
@@ -142,7 +354,6 @@
         acakTeks(elemenTeks);
       });
 
-
       // Jalankan ulang animasi saat elemen di-hover.
       elemeninfo.addEventListener("mouseover", () => {
         acakTeks(elemeninfo);
@@ -190,13 +401,17 @@
       });
 
       // Config Tailwind transisi masuk page
-      
+
       const elemenprofilumum = document.getElementById("first-section");
       elemenprofilumum.classList.add("opacity-0", "translate-y-4");
       window.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           elemenprofilumum.classList.remove("opacity-0", "translate-y-4");
-          elemenprofilumum.classList.add("transition", "duration-500", "ease-in");
+          elemenprofilumum.classList.add(
+            "transition",
+            "duration-500",
+            "ease-in",
+          );
         }, 100);
       });
     </script>
