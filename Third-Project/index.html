@@ -31,13 +31,14 @@
         align-items: center;
         justify-content: center;
         padding: 0.24rem 0.35rem;
-        color: #d4d4d8;
-        background-color: transparent;
         border: 0;
         cursor: pointer;
         transition: color 300ms ease;
       }
 
+      .button-corner:hover {
+        color: oklch(12.9% 0.042 264.695); /* Ubah warna teks saat hover */
+      }
       /* Empat penanda awal berukuran kecil dan hanya menggambar sisi sudutnya. */
       .button-corner {
         position: absolute;
@@ -77,12 +78,6 @@
         bottom: 0;
         border-right-width: 1px;
         border-bottom-width: 1px;
-      }
-
-      /* Lebar dan tinggi penanda dianimasikan langsung agar gerakannya terlihat jelas. */
-      .corner-button:hover,
-      .corner-button:focus-visible {
-        color: #ffffff;
       }
 
       .corner-button:hover .button-corner,
@@ -150,7 +145,7 @@
       }
     </style>
   </head>
-  <body class="bg-zinc-900">
+  <body class="relative bg-zinc-900">
     <!-- Overlay garis dan label koordinat yang posisinya diatur JavaScript. -->
     <div id="cursor-crosshair" aria-hidden="true">
       <div class="crosshair-line crosshair-horizontal"></div>
@@ -215,16 +210,16 @@
               feel free to reach out!
             </h1>
           </div>
-          <div id="sec-section-button" class="flex space-x-4">
-            <button class="corner-button">
-              Book a Call
+          <div id="sec-section-button" class="flex space-x-4 mt-2">
+            <button id="book-call" class="corner-button text-gray-300 hover:text-slate-900 hover:bg-gray-100 focus-visible:text-white">
+              <p id="book-call-text" data-value="Book a Call">Book a Call</p>
               <span class="button-corner button-corner-top-left"></span>
               <span class="button-corner button-corner-top-right"></span>
               <span class="button-corner button-corner-bottom-left"></span>
               <span class="button-corner button-corner-bottom-right"></span>
             </button>
-            <button class="corner-button">
-              Send an Email
+            <button id="send-email" class="corner-button text-gray-500 hover:text-white focus-visible:text-white">
+              <p id="send-email-text" data-value="Send an Email">Send an Email</p>
               <span class="button-corner button-corner-top-left"></span>
               <span class="button-corner button-corner-top-right"></span>
               <span class="button-corner button-corner-bottom-left"></span>
@@ -234,6 +229,10 @@
         </div>
       </div>
     </section>
+
+    <section
+      class="flex flex-col"
+      id="Project-Information"></section>
     <script>
       // Siapkan elemen crosshair dan garisnya agar bisa dipindahkan saat pointer bergerak.
       const crosshair = document.getElementById("cursor-crosshair");
@@ -301,6 +300,10 @@
       const elemeninfo = document.getElementById("more-info");
       const lokasi = document.getElementById("Location");
       const secretchar = "#_-/\|<>01";
+      const bookcalltext = document.getElementById("book-call-text");
+      const sendemailtext = document.getElementById("send-email-text");
+      const bookcallButton = document.getElementById("book-call");
+      const sendemailButton = document.getElementById("send-email");
 
       const animasiBerjalan = new WeakSet();
 
@@ -347,6 +350,8 @@
       window.addEventListener("DOMContentLoaded", () => {
         acakTeks(elemenTeks);
         acakTeks(elemeninfo);
+        acakTeks(bookcalltext);
+        acakTeks(sendemailtext);
       });
 
       // Jalankan ulang animasi saat elemen di-hover.
@@ -354,11 +359,25 @@
         acakTeks(elemenTeks);
       });
 
-      // Jalankan ulang animasi saat elemen di-hover.
       elemeninfo.addEventListener("mouseover", () => {
         acakTeks(elemeninfo);
       });
 
+      bookcallButton.addEventListener("mouseenter", () => {
+        acakTeks(bookcalltext);
+      });
+
+      sendemailButton.addEventListener("mouseenter", () => {
+        acakTeks(sendemailtext);
+      });
+
+      bookcallButton.addEventListener("focus", () => {
+        acakTeks(bookcalltext);
+      });
+
+      sendemailButton.addEventListener("focus", () => {
+        acakTeks(sendemailtext);
+      });
       //Buat lokasi
       function tutuplokasi(target) {
         if (animasiBerjalan.has(target)) return;
@@ -402,7 +421,7 @@
 
       // Config Tailwind transisi masuk page
 
-      const elemenprofilumum = document.getElementById("first-section");
+      const elemenprofilumum = document.body;
       elemenprofilumum.classList.add("opacity-0", "translate-y-4");
       window.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
